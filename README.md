@@ -6,11 +6,12 @@ This repository contains several scripts that are used in the publication workfl
 All the scripts are published under the GNU General Public License v3.0.
 
 ## Contents
-* wordclouds: word clouds for RIDE reviews
+* tei2pdf: convert RIDE TEI files to PDF
 * oai-api: scripts of the OAI-PMH API for RIDE metadata
+* wordclouds: word clouds for RIDE reviews
 
 ## Contributors
-The RIDE scripts have been written by Ulrike Henny-Krahmer (wordclouds, oai-api), Bernhard Assmann (oai-api), and Patrick Sahle (oai-api).
+The RIDE scripts have been written by Ulrike Henny-Krahmer (tei2pdf, oai-api, wordclouds), Bernhard Assmann (oai-api), and Patrick Sahle (oai-api).
 
 The OAI interface is based on an XQuery module which was initially developed by André Streicher for the project [Monasterium.net](https://github.com/icaruseu/mom-ca/blob/59703228e9de2b222be9439fc61cdd530a8c78bd/my/XRX/src/core/app/oaiinterface/oaiinterface.xqm), has been reused in the project [Das altägyptische Totenbuch](http://totenbuch.awk.nrw.de/projekt/dokumentation#OAIPMH) and has now been adapted for the use in RIDE.
 
