@@ -1,13 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-#  wordclouds.py
-#
-#  Generates word clouds for RIDE reviews
-#  
-#  @author: Ulrike Henny-Krahmer
-#  
-#  
+"""
+wordclouds.py
+
+Generates word clouds for RIDE reviews.
+
+This is a component file of the RIDE scripts.
+RIDE scripts is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version, see http://www.gnu.org/licenses/.
+
+  
+@author: Ulrike Henny-Krahmer
+  
+"""
 
 import sys
 from os.path import join
