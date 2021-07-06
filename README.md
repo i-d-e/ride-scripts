@@ -22,4 +22,4 @@ ride-editor (at) i-d-e.de
 
 If you reuse the RIDE scripts, we kindly ask you to cite them as suggested here:
 
-Institut für Dokumentologie und Editorik (ed.) (2021). “Scripts of RIDE (A Review journal for digital editions and resources).” Version 1.0.0. GitHub.com. https://github.com/i-d-e/ride-scripts.
+Institut für Dokumentologie und Editorik (ed.) (2021). “Scripts of RIDE (A Review journal for digital editions and resources).” Version 1.0. GitHub.com. https://github.com/i-d-e/ride-scripts.
