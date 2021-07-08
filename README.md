@@ -1,4 +1,5 @@
 # Scripts of RIDE (A review journal for digital editions and resources)
+[![DOI](https://zenodo.org/badge/383477818.svg)](https://zenodo.org/badge/latestdoi/383477818)
 
 This repository contains several scripts that are used in the publication workflow of the review journal RIDE (https://ride.i-d-e.de/).
 
@@ -22,4 +23,4 @@ ride-editor (at) i-d-e.de
 
 If you reuse the RIDE scripts, we kindly ask you to cite them as suggested here:
 
-Institut für Dokumentologie und Editorik (ed.) (2021). “Scripts of RIDE (A Review journal for digital editions and resources).” Version 1.0.0. GitHub.com. https://github.com/i-d-e/ride-scripts.
+Institut für Dokumentologie und Editorik (ed.) (2021). “Scripts of RIDE (A Review journal for digital editions and resources).” Version 1.0.0. GitHub.com. https://github.com/i-d-e/ride-scripts. DOI: 10.5281/zenodo.5082038.
