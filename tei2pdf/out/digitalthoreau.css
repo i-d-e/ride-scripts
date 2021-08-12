@@ -15,7 +15,7 @@
         font-size: 0.8em;
         width: 90%;
         margin-left: 7px;
-        content: "Griesinger, Christian. “Tustep. Review of the Tübinger System von Textverarbeitungs-Programmen.” RIDE 11 (2020). doi: 10.18716/ride.a.11.2. Accessed: 11.03.2021.";
+        content: "Kelly, Aodhán. “Review of ‘Digital Thoreau’.” RIDE 4 (2016). doi: 10.18716/ride.a.4.2. Accessed: 28.07.2021.";
     }
 }
 
@@ -102,6 +102,10 @@ img.graphic {
     width: 500px;
     max-height: 700px;
     object-fit: scale-down;
+}
+img.license {
+    width: 55px;
+    vertical-align: top;
 }
 
 p.code-example {

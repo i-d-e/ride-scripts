@@ -9,7 +9,7 @@
         transform a RIDE review to HTML/CSS as a basis for PDF generation
         @author: Ulrike Henny-Krahmer
         created on 16 January 2021
-        last updated on 12 February 2021
+        last updated on 26 July 2021
         
         This is a component file of the RIDE scripts.
 		RIDE scripts is free software: you can redistribute it and/or modify
@@ -18,12 +18,13 @@
 		(at your option) any later version, see http://www.gnu.org/licenses/.
     -->
     
+    <!-- PARAMS -->
+    <xsl:param name="outfolder"/><!-- absolute or relative (to this XSLT) path to the output folder -->
         
     <!-- VARIABLES -->
-    <xsl:variable name="wdir">/home/ulrike/Dokumente/IDE/Reviews/PDF-Export</xsl:variable><!-- absolute path to the working directory -->
-    <xsl:variable name="outfolder">out</xsl:variable><!-- absolute or relative (to this XSLT) path to the output folder -->
+    <xsl:variable name="wdir">/home/ulrike/Git/ride-scripts/tei2pdf/</xsl:variable><!-- absolute path to the working directory -->
     <xsl:variable name="lang" select="//langUsage/language/@ident"/>
-    <xsl:variable name="review-shortcut" select="substring-before(tokenize(base-uri(.),'/')[last()],'-tei.xml')"/>
+    <xsl:variable name="review-shortcut" select="substring-before(tokenize(//publicationStmt/idno[@type='archive'],'/')[last()],'.pdf')"/>
     <xsl:variable name="review-title" select="//teiHeader//titleStmt/title/normalize-space(.)"/>
     <xsl:variable name="base" select="//taxonomy/@xml:base" />
     <xsl:variable name="home" select="'http://ride.i-d-e.de/'" />
@@ -2535,6 +2536,10 @@ img.graphic {
     max-height: 700px;
     object-fit: scale-down;
 }
+img.license {
+    width: 55px;
+    vertical-align: top;
+}
 
 p.code-example {
     text-align: left;
@@ -2696,7 +2701,7 @@ table, td, tr, th {
                                                 </xsl:when>
                                                 <xsl:otherwise><xsl:text>.</xsl:text></xsl:otherwise>
                                             </xsl:choose>
-                                        </xsl:for-each></p>
+                                        </xsl:for-each> <br/><a href="http://creativecommons.org/licenses/by/4.0/"><img class="license" src="{$wdir}/img/by.png" alt="CC-BY"/></a></p>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </div>

@@ -39,7 +39,7 @@ saxon_path = "/home/ulrike/Programme/saxon/saxon9he.jar"
 xsl_path = join(wdir, "review-to-pdf.xsl")
 ```
 
-* navigate to this repository (/Git/ride-tech/tei2pdf)
+* navigate to this repository (/Git/ride-scripts/tei2pdf)
 * type: python3 reviews_to_pdf.py
 
 ### See the results:
