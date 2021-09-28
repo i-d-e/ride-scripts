@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 wordclouds.py
@@ -28,7 +28,7 @@ from wordcloud import WordCloud
 from lxml import etree
 
 
-def create_wordclouds(mask_file, font_file, stopwords_file, colormap):
+def create_wordclouds(mask_file, font_file, colormap):
 	"""
 	Create wordclouds for RIDE reviews.
 	
@@ -36,14 +36,10 @@ def create_wordclouds(mask_file, font_file, stopwords_file, colormap):
 	
 	mask_file (str): filename of the mask image to use
 	font_file (str): filename of the font file to use
-	stopwords_file (str): filename of the stopword list to use
 	colormap (str): name of the matplotlib colormap to use
 	
-	TO DO: once the language of the review is included in the TEI, use that information to choose the right 
-	stopword list. Right now it is necessary to generate the wordclouds for the different languages separately.
-	
-	Example call: create_wordclouds("cloud_mask.png", "MKorsair.ttf", "stopwords_en.txt", "summer")
-	From the command line: wordclouds.py "cloud_mask.png", "MKorsair.ttf", "stopwords_en.txt", "summer"
+	Example call: create_wordclouds("cloud_mask.png", "MKorsair.ttf", "summer")
+	From the command line: python3 wordclouds.py "cloud_mask.png" "MKorsair.ttf" "summer"
 	"""
 
 	# read TEI input files, generate a cloud for each one
@@ -93,7 +89,9 @@ def create_wordclouds(mask_file, font_file, stopwords_file, colormap):
 		# read the mask image which determines the form of the wordcloud
 		mask = np.array(Image.open(join("masks", mask_file)))
 		
-		# read the stopword list
+		# read the stopword list, depending on the language of the review
+		review_lang = xml.xpath("//tei:language/@ident", namespaces=namespace)[0]
+		stopwords_file = "stopwords_" + review_lang + ".txt"
 		with open(join("stopwords", stopwords_file), encoding="UTF-8") as infile:
 			lines = infile.read().splitlines()
 			stopwords = set(lines)
@@ -122,4 +120,4 @@ def create_wordclouds(mask_file, font_file, stopwords_file, colormap):
 
 
 if __name__ == "__main__":
-	create_wordclouds(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+	create_wordclouds(sys.argv[1], sys.argv[2], sys.argv[3])
