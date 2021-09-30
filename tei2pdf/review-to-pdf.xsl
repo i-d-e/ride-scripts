@@ -104,11 +104,10 @@
             <xsl:if test="$cat/catDesc[1][ref]">
                 <xsl:choose>
                     <xsl:when test="contains($cat/catDesc/ref,'and')">
-                        <div>(<a href="{$base}{$cat/catDesc[ref]/ref/substring-before(@target,' ')}"><xsl:value-of select="$cat/catDesc[ref]/ref/substring-before(.,' and')" /></a>
-                            and <a href="{$base}{$cat/catDesc[ref]/ref/substring-after(@target,' ')}"><xsl:value-of select="$cat/catDesc[ref]/ref/substring-after(.,'and ')" /></a>)</div>
+                        <div>(<a href="{$base}{$cat/catDesc[ref]/ref/substring-before(@target,' #')}"><xsl:value-of select="normalize-space($cat/catDesc[ref]/ref/substring-before(.,' and'))"/></a> and <a href="{$base}{'#'}{$cat/catDesc[ref]/ref/substring-after(@target,' #')}"><xsl:value-of select="normalize-space($cat/catDesc[ref]/ref/substring-after(.,'and'))" /></a>)</div>
                     </xsl:when>
                     <xsl:otherwise>
-                        <div>(<a href="{$base}{$cat/catDesc[ref]/ref/@target}"><xsl:value-of select="$cat/catDesc[ref]/ref" /></a>)</div>
+                        <div>(<a href="{$base}{$cat/catDesc[ref]/ref/@target}"><xsl:value-of select="$cat/catDesc[ref]/ref/normalize-space()" /></a>)</div>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:if>
@@ -192,7 +191,7 @@ div.header img {
 div.header h2 {
     font-weight: normal;
     text-align: right;
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 div.header p {
     text-align: right;
@@ -232,7 +231,9 @@ p {
     orphans: 2;
     text-align: justify;
 }
-
+li {
+    text-align: justify;
+}
 blockquote {
     width: 90%;
     margin: 28px;
@@ -373,7 +374,7 @@ table, td, tr, th {
                 <body>
                     <div class="header">
                         <img src="{$wdir}/img/ide-logo.png" alt="IDE-Logo"/>
-                        <h2><a href="https://ride.i-d-e.de/">ride. A review journal for digital editions and resources</a></h2>
+                        <h2><a href="https://ride.i-d-e.de/">RIDE – A review journal for digital editions and resources</a></h2>
                         <p>published by the <a href="https://www.i-d-e.de/">IDE</a></p>
                     </div>
                     <div class="body">
@@ -414,6 +415,29 @@ table, td, tr, th {
                                         </xsl:for-each>
                                         Reviewed by 
                                         <xsl:for-each select="$review-authors">
+                                            <xsl:choose>
+                                                <xsl:when test="@ref != ''">
+                                                    <xsl:choose>
+                                                        <xsl:when test="@ref/contains(., 'orcid')">
+                                                            <a href="{@ref}"><img src="{concat($wdir,'/img/orcid-small.png')}" alt="orcid-icon" title="ORCID Identifier"
+                                                                style="width:18px;"/></a>
+                                                            <xsl:text> </xsl:text>
+                                                        </xsl:when>
+                                                        <xsl:when test="@ref/contains(., 'gnd')">
+                                                            <a href="{@ref}"><img src="{concat($wdir,'/img/gnd-small.png')}" alt="gnd-icon" title="GND Identifier"
+                                                                style="width:18px;"/></a>
+                                                            <xsl:text> </xsl:text>
+                                                        </xsl:when>
+                                                        <xsl:when test="@ref/contains(., 'viaf')">
+                                                            <a href="{@ref}"><img src="{concat($wdir,'/img/viaf-small.png')}" alt="viaf-icon" title="VIAF Identifier"
+                                                                style="width:18px;"/></a>
+                                                            <xsl:text> </xsl:text>
+                                                        </xsl:when>
+                                                        <xsl:otherwise/>
+                                                    </xsl:choose>
+                                                </xsl:when>
+                                                <xsl:otherwise/>
+                                            </xsl:choose>
                                             <xsl:variable name="review-author-surname" select=".//surname"/>
                                             <xsl:variable name="review-author-forename" select=".//forename"/>
                                             <xsl:value-of select="$review-author-forename"/><xsl:text> </xsl:text><xsl:value-of select="$review-author-surname"/>
@@ -498,7 +522,12 @@ table, td, tr, th {
     
     
     <xsl:template match="body//div">
-        <div><xsl:apply-templates/></div>
+        <div>
+            <xsl:if test="@xml:id">
+                <xsl:attribute name="id" select="@xml:id"/>
+            </xsl:if>
+            <xsl:apply-templates/>
+        </div>
     </xsl:template>
     
     <xsl:template match="body/div/head">
@@ -722,6 +751,9 @@ table, td, tr, th {
     <!-- bibliography -->
     <xsl:template match="back//bibl">
         <p class="bibl">
+            <xsl:if test="@xml:id">
+                <xsl:attribute name="id" select="@xml:id"/>
+            </xsl:if>
             <xsl:apply-templates/>
         </p>
     </xsl:template>
@@ -777,16 +809,36 @@ table, td, tr, th {
                             <th colspan="2">Reviewer</th>
                         </tr>
                         <tr>
-                            <th>Surname</th>
-                            <td><xsl:value-of select=".//surname" /></td>
-                        </tr>
-                        <tr>
-                            <th>First Name</th>
-                            <td><xsl:value-of select=".//forename" /></td>
+                            <th>Name</th>
+                            <td>           
+                                <xsl:choose>
+                                    <xsl:when test="@ref != ''">
+                                        <xsl:choose>
+                                            <xsl:when test="@ref/contains(., 'orcid')">
+                                                <a href="{@ref}"><img src="{concat($wdir,'/img/orcid-small.png')}" alt="orcid-icon" title="ORCID Identifier"
+                                                    style="width:18px;"/></a>
+                                                <xsl:text> </xsl:text>
+                                            </xsl:when>
+                                            <xsl:when test="@ref/contains(., 'gnd')">
+                                                <a href="{@ref}"><img src="{concat($wdir,'/img/gnd-small.png')}" alt="gnd-icon" title="GND Identifier"
+                                                    style="width:18px;"/></a>
+                                                <xsl:text> </xsl:text>
+                                            </xsl:when>
+                                            <xsl:when test="@ref/contains(., 'viaf')">
+                                                <a href="{@ref}"><img src="{concat($wdir,'/img/viaf-small.png')}" alt="viaf-icon" title="VIAF Identifier"
+                                                    style="width:18px;"/></a>
+                                                <xsl:text> </xsl:text>
+                                            </xsl:when>
+                                            <xsl:otherwise/>
+                                        </xsl:choose>
+                                    </xsl:when>
+                                    <xsl:otherwise/>
+                                </xsl:choose>
+                                <xsl:value-of select="concat(.//surname, ', ', .//forename)" /></td>
                         </tr>
                         <xsl:if test=".//orgName/text()">
                             <tr>
-                                <th>Organization</th>
+                                <th>Affiliation</th>
                                 <td>
                                     <xsl:value-of select=".//orgName" />
                                 </td>

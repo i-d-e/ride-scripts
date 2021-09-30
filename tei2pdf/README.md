@@ -16,7 +16,7 @@ The script takes TEI files of RIDE reviews as input and generates PDF files for 
 ### Data you need:
 * TEI files of the reviews
 * an output directory (needs to be there)
-* the IDE logo as an image file (is included here in the img subfolder)
+* some image files (logos/icons; included here in the img subfolder)
 
 ### How to call the script:
 * open the file reviews_to_pdf.py in an editor
