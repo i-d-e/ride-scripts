@@ -117,10 +117,10 @@
     <xsl:function name="local:get-booleans">
         <xsl:param name="cat" />
         <xsl:choose>
-            <xsl:when test="$cat/category/catDesc[num]/num/@value='1'">yes</xsl:when>
-            <xsl:when test="$cat/category/catDesc[num]/num/@value='2'">not applicable</xsl:when>
-            <xsl:when test="$cat/category/catDesc[num]/num/@value='3'">unknown</xsl:when>
-            <xsl:when test="$cat/category/catDesc[num]/num/@value='0'">no</xsl:when>
+            <xsl:when test="$cat/category/catDesc[. = 'Yes']/following-sibling::catDesc/num/@value='1'">yes</xsl:when>
+            <xsl:when test="$cat/category/catDesc[. = 'No']/following-sibling::catDesc/num/@value='1'">no</xsl:when>
+            <xsl:when test="$cat/category/catDesc[starts-with(.,'Not applicable')]/following-sibling::catDesc/num/@value='1'">not applicable</xsl:when>
+            <xsl:when test="$cat/category/catDesc[. = 'Unknown']/following-sibling::catDesc/num/@value='1'">Unknown</xsl:when>
         </xsl:choose>
     </xsl:function>
     
@@ -139,14 +139,21 @@
         <xsl:param name="context" />
         <xsl:param name="role" />
         <tr>
-            <th><xsl:value-of select="$role" />s</th>
-            <td colspan="2">
-                <xsl:for-each select="$context//notesStmt//respStmt[resp=$role]">
-                    <xsl:sort select="resp" />
-                    <xsl:value-of select=".//persName" />
-                    <xsl:if test="position() != last()"><br /></xsl:if>
-                </xsl:for-each>
-            </td>
+            <th><xsl:value-of select="$role"/>s</th>
+            <xsl:for-each select="$context">
+                <xsl:variable name="res" select="@xml:id"/>
+                <td colspan="2">
+                    <xsl:choose>
+                        <xsl:when test=".//respStmt[resp=$role]">
+                            <xsl:for-each select=".//respStmt[resp=$role]">
+                                <xsl:sort select=".//persName"></xsl:sort>
+                                <xsl:value-of select=".//persName/normalize-space()" /><xsl:if test="position() != last()"><br/></xsl:if>
+                            </xsl:for-each>
+                        </xsl:when>
+                        <xsl:otherwise>-</xsl:otherwise>
+                    </xsl:choose>
+                </td>       
+            </xsl:for-each>
         </tr>
     </xsl:function>
     
@@ -270,14 +277,17 @@ img.license {
 
 p.code-example {
     text-align: left;
-    font-size: 0.9em;
+    font-size: 0.8em;
+    padding-left: 1cm;
+    line-height: 1em;
 }
 span.code-caption {
     display: block;
     text-align: center;
-    font-size: 0.9em;
+    font-size: 1.1em;
     page-break-before: avoid;
     margin-top: 0.5em;
+    line-height: 1.7em;
 }
 p.bibl {
     padding-left: 2em;
@@ -359,6 +369,9 @@ table, td, tr, th {
     background-color: #999999;
     color: #FFFFFF;
     padding: 5px 7px;
+}
+.factsheet tr, .factsheet th, .factsheet td {
+    page-break-inside: avoid;
 }
 
         </xsl:result-document>
@@ -781,14 +794,14 @@ table, td, tr, th {
                     </tr>
                     <tr>
                         <th>Title</th>
-                        <td><xsl:value-of select="$source/bibl/title" /></td>
+                        <td><xsl:value-of select="$source/bibl/title/normalize-space()" /></td>
                     </tr>
                     <tr>
                         <th>Editors</th>
-                        <td><xsl:value-of select="$source/bibl/editor" /></td>
+                        <td><xsl:value-of select="$source/bibl/editor/normalize-space()" /></td>
                     </tr>
                     <tr>
-                        <xsl:variable name="res_URI" select="$source//idno[@type='URI']" />
+                        <xsl:variable name="res_URI" select="$source//idno[@type='URI']/normalize-space()" />
                         <th>URI</th>
                         <td><a href="{$res_URI}"><xsl:value-of select="$res_URI" /></a></td>
                     </tr>
@@ -881,29 +894,29 @@ table, td, tr, th {
                             </tr>
                         </xsl:for-each>
                     </xsl:for-each>
-                    <xsl:if test="$source//notesStmt//respStmt">
+                    <xsl:if test="$source//respStmt">
                         <tr>
                             <th colspan="3">Personnel</th>
                         </tr>
-                        <xsl:if test="$source//notesStmt//respStmt[resp='Editor']">
+                        <xsl:if test="$source//respStmt[resp='Editor']">
                             <xsl:copy-of select="local:get-resp-row($source, 'Editor')" />
                         </xsl:if>
-                        <xsl:if test="$source//notesStmt//respStmt[resp='Encoder']">
+                        <xsl:if test="$source//respStmt[resp='Encoder']">
                             <xsl:copy-of select="local:get-resp-row($source, 'Encoder')" />
                         </xsl:if>
-                        <xsl:if test="$source//notesStmt//respStmt[resp='Programmer']">
+                        <xsl:if test="$source//respStmt[resp='Programmer']">
                             <xsl:copy-of select="local:get-resp-row($source, 'Programmer')" />
                         </xsl:if>
-                        <xsl:if test="$source//notesStmt//respStmt[resp='Advisor']">
+                        <xsl:if test="$source//respStmt[resp='Advisor']">
                             <xsl:copy-of select="local:get-resp-row($source, 'Advisor')" />
                         </xsl:if>
-                        <xsl:if test="$source//notesStmt//respStmt[resp='Designer']">
+                        <xsl:if test="$source//respStmt[resp='Designer']">
                             <xsl:copy-of select="local:get-resp-row($source, 'Designer')" />
                         </xsl:if>
-                        <xsl:if test="$source//notesStmt//respStmt[resp='Administrator']">
+                        <xsl:if test="$source//respStmt[resp='Administrator']">
                             <xsl:copy-of select="local:get-resp-row($source, 'Administrator')" />
                         </xsl:if>
-                        <xsl:if test="$source//notesStmt//respStmt[resp='Contributor']">
+                        <xsl:if test="$source//respStmt[resp='Contributor']">
                             <xsl:copy-of select="local:get-resp-row($source, 'Contributor')" />
                         </xsl:if>
                     </xsl:if>
