@@ -137,3 +137,9 @@ well
 first
 come
 would
+http
+cf
+org
+www
+https
+htm

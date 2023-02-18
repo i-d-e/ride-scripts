@@ -622,3 +622,7 @@ vgl
 siehe
 abb
 bzw
+http
+org
+https
+de
