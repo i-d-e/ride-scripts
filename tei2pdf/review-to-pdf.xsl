@@ -348,6 +348,7 @@ table {
     border-collapse: collapse;
     margin: 1.5em auto;
     max-width: 100%;
+    /*font-size: 0.8em;*/
 }
 table caption {
     text-align: center;

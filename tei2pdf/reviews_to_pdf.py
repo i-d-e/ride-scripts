@@ -141,7 +141,7 @@ inpath = "/home/ulrike/Git/ride-scripts/tei2pdf/in/"
 # directory for outputs (relative to the working directory):
 outpath = join(wdir, "out")
 # path to the saxon installation (to the .jar file):
-saxon_path = "/home/ulrike/Programme/saxon/saxon9he.jar"
+saxon_path = "/home/ulrike/Programs/saxon-he-12.0.jar"
 # path to the XSLT file to use for transformation (relative to the working directory, does not need to be changed):
 xsl_path = join(wdir, "review-to-pdf.xsl")
 
