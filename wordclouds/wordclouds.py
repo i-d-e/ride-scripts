@@ -26,6 +26,12 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from wordcloud import WordCloud
 from lxml import etree
+import random
+
+
+def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
+	# 7d3c47
+	return "hsl(350, 35%%, %d%%)" % random.randint(30, 40)
 
 
 def create_wordclouds(mask_file, font_file, colormap):
@@ -105,6 +111,7 @@ def create_wordclouds(mask_file, font_file, colormap):
 
 		# GENERATE THE WORDCLOUD
 		wordcloud = WordCloud(background_color="white", font_path=font_path, prefer_horizontal=1.0, colormap=colormap, mask=mask, stopwords=stopwords, collocations=False, max_words=500, min_font_size=4, repeat=True).generate(fulltext)
+		#wordcloud = wordcloud.recolor(color_func=color_func, random_state=3)
 		wordcloud.to_file(join("wc_out", filename_out))
 
 		#plt.imshow(wordcloud, interpolation="bilinear")
