@@ -20,7 +20,8 @@
     <xsl:variable name="input-data-reviews" select="collection('/home/ulrike/Git/ride/tei_all')"/>
     <xsl:variable name="input-data-editorials" select="(doc('/home/ulrike/Git/ride/issues/issue06/editorial/editorial-tei.xml'),
         doc('/home/ulrike/Git/ride/issues/issue08/editorial/editorial-tei.xml'),
-        doc('/home/ulrike/Git/ride/issues/issue09/editorial/editorial-tei.xml'))"/>
+        doc('/home/ulrike/Git/ride/issues/issue09/editorial/editorial-tei.xml'),
+        doc('/home/ulrike/Git/ride/issues/issue16/editorial/editorial-tei.xml'))"/>
     
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
     
