@@ -267,6 +267,7 @@ her
 heute
 hier
 hin
+hinaus
 hinter
 hoch
 hätte
