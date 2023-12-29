@@ -254,6 +254,12 @@ p.source {
 span.ftn {
     white-space: nowrap;
 }
+span.del {
+    text-decoration: line-through;
+}
+span.underline {
+    text-decoration: underline;
+}
 
 figure {
     margin: 20px;
@@ -673,7 +679,7 @@ table, td, tr, th {
         </ul>
     </xsl:template>
     
-    <xsl:template match="list[@rend='ordered']">
+    <xsl:template match="list[@rend=('ordered','numbered')]">
         <ol>
             <xsl:apply-templates/>
         </ol>
@@ -707,6 +713,18 @@ table, td, tr, th {
     
     <xsl:template match="hi[@rend='superscript']">
         <sup><xsl:apply-templates/></sup>
+    </xsl:template>
+    
+    <xsl:template match="hi[@rend='underline']">
+        <span class="underline"><xsl:apply-templates/></span>
+    </xsl:template>
+    
+    <xsl:template match="hi[@rend='underline superscript']">
+        <sup><span class="underline"><xsl:apply-templates/></span></sup>
+    </xsl:template>
+    
+    <xsl:template match="hi[@rend='underline subscript']">
+        <sub><span class="underline"><xsl:apply-templates/></span></sub>
     </xsl:template>
     
     <xsl:template match="ref[@target][not(@type)][starts-with(normalize-space(.),'http')][string-length(normalize-space(.)) &gt;= 60]">
@@ -760,6 +778,11 @@ table, td, tr, th {
     
     <xsl:template match="body//mod//del">
         <span class="deletion"><xsl:apply-templates/></span>
+    </xsl:template>
+    
+    <!-- further inline elements -->
+    <xsl:template match="body//del">
+        <span class="del"><xsl:apply-templates/></span>
     </xsl:template>
     
     <!-- bibliography -->
