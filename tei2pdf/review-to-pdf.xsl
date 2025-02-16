@@ -563,7 +563,19 @@ table, td, tr, th {
     </xsl:template>
     
     <xsl:template match="body//table/head">
-        <caption><xsl:apply-templates/></caption>
+        <caption>
+            <xsl:choose>
+                <xsl:when test="$lang='de'">
+                    <xsl:text>Tabelle </xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>Tab. </xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:value-of select="parent::table/@xml:id/substring-after(.,'table')"/>
+            <xsl:if test=". != ''"><xsl:text>: </xsl:text></xsl:if>
+            <xsl:apply-templates/>
+        </caption>
     </xsl:template>
     
     <xsl:template match="body//p | back//p">
@@ -649,7 +661,10 @@ table, td, tr, th {
     
     <!-- tables -->
     <xsl:template match="table">
-        <table>
+        <table style="font-size: 80%;">
+            <xsl:if test="@xml:id">
+                <xsl:attribute name="id" select="@xml:id"/>
+            </xsl:if>
             <xsl:apply-templates/>
         </table>
     </xsl:template>
