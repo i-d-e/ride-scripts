@@ -38,6 +38,12 @@ saxon_path = "/home/ulrike/Programme/saxon/saxon9he.jar"
 #path to the XSLT file to use for transformation (relative to the working directory, does not need to be changed):
 xsl_path = join(wdir, "review-to-pdf.xsl")
 ```
+* open the file review-to-pdf.xsl in an editor
+* change the variable 'wdir'
+
+```xml
+* <xsl:variable name="wdir">/home/ulrike/Git/ride-scripts/tei2pdf/</xsl:variable><!-- absolute path to the working directory -->
+```
 
 * navigate to this repository (/Git/ride-scripts/tei2pdf)
 * type: python3 reviews_to_pdf.py
