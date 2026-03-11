@@ -9,7 +9,7 @@
         transform a RIDE review to HTML/CSS as a basis for PDF generation
         @author: Ulrike Henny-Krahmer
         created on 16 January 2021
-        last updated on 5 September 2021
+        last updated on 11 March 2026
         
         This is a component file of the RIDE scripts.
 		RIDE scripts is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@
     <xsl:variable name="wdir">/home/ulrike/Git/ride-scripts/tei2pdf/</xsl:variable><!-- absolute path to the working directory -->
     <xsl:variable name="lang" select="//langUsage/language/@ident"/>
     <xsl:variable name="review-shortcut" select="substring-before(tokenize(//publicationStmt/idno[@type='archive'],'/')[last()],'.pdf')"/>
-    <xsl:variable name="review-title" select="//teiHeader//titleStmt/title/normalize-space(.)"/>
+    <xsl:variable name="review-title" select="//teiHeader//titleStmt/title"/>
     <xsl:variable name="base" select="//taxonomy/@xml:base" />
     <xsl:variable name="home" select="'http://ride.i-d-e.de/'" />
     <xsl:variable name="issue-type" select="//seriesStmt/biblScope[@unit='issue']"/>
@@ -39,6 +39,20 @@
      
     <xsl:variable name="sources" select="//teiHeader//relatedItem[@type='reviewed_resource']"/>
     <xsl:variable name="review-authors" select="//teiHeader//titleStmt/author"/>
+	  <xsl:variable name="editors">
+	  	<xsl:for-each select="//teiHeader//seriesStmt/editor[not(@role)]">
+	  		<xsl:choose>
+	  		  <xsl:when test="position() = last() - 1">
+	  		    <xsl:value-of select="."/><xsl:text>, and </xsl:text></xsl:when>
+	  			<xsl:when test="position() = last()">
+	  				<xsl:value-of select="."/><xsl:text>. </xsl:text>
+	  			</xsl:when>
+	  			<xsl:otherwise>
+	  				<xsl:value-of select="."/><xsl:text>, </xsl:text>
+	  			</xsl:otherwise>
+	  		</xsl:choose>
+	  	</xsl:for-each>
+	  </xsl:variable>
     <xsl:variable name="accessed-dates" select="$sources//date[@type='accessed']"/>
     <xsl:variable name="current-date" select="xs:string(current-date())"/>
     <xsl:variable name="citation">
@@ -56,11 +70,15 @@
                         <xsl:when test="count($review-authors) &gt; 1">
                             <xsl:text> and </xsl:text>
                             <xsl:value-of select="$review-author-forename"/><xsl:text> </xsl:text>
-                            <xsl:value-of select="$review-author-surname"/><xsl:text>.</xsl:text>
+                            <xsl:value-of select="$review-author-surname"/>
+                        		(<xsl:value-of select="//teiHeader//publicationStmt//date/@when/substring(.,1,4)"/>)
+                        		<xsl:text>.</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="$review-author-surname"/><xsl:text>, </xsl:text>
-                            <xsl:value-of select="$review-author-forename"/><xsl:text>.</xsl:text>
+                            <xsl:value-of select="$review-author-forename"/>
+                        		(<xsl:value-of select="//teiHeader//publicationStmt//date/@when/substring(.,1,4)"/>)
+                        		<xsl:text>.</xsl:text>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:otherwise>
@@ -70,18 +88,20 @@
         <xsl:choose>
             <xsl:when test="contains(lower-case($review-title),'review') or contains($review-title,'Rezension') or contains(lower-case($review-title),'editorial')">
                 <xsl:text>“</xsl:text>
-                <xsl:value-of select="$review-title"/>
+                <xsl:apply-templates select="$review-title" mode="review-title"/>
                 <xsl:text>.”</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>“Review of ‘</xsl:text>
-                <xsl:value-of select="$review-title"/>
+                <xsl:apply-templates select="$review-title" mode="review-title"/>
                 <xsl:text>’.”</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text> RIDE </xsl:text>
-        <xsl:value-of select="//teiHeader//seriesStmt//biblScope[@unit='issue']/@n"/> (<xsl:value-of select="//teiHeader//publicationStmt//date/@when/substring(.,1,4)"/>).
-        doi: <xsl:value-of select="//teiHeader//publicationStmt//idno[@type='DOI']"/>.
+        <xsl:value-of select="//teiHeader//seriesStmt//biblScope[@unit='issue']/@n"/>
+    		<xsl:text>, ed. by </xsl:text>
+    	  <xsl:value-of select="$editors"/>
+        DOI: <xsl:value-of select="//teiHeader//publicationStmt//idno[@type='DOI']"/>.
         Accessed: <xsl:value-of select="substring($current-date,9,2)"/>.<xsl:value-of select="substring($current-date,6,2)"/>.<xsl:value-of select="substring($current-date,1,4)"/>.
     </xsl:variable>
     
@@ -160,6 +180,14 @@
     
     
     <!-- TEMPLATES -->
+    
+    <xsl:template match="emph" mode="review-title">
+        <xsl:text> </xsl:text><em><xsl:apply-templates mode="review-title"/></em>
+    </xsl:template>
+    
+    <xsl:template match="text()" mode="review-title">
+        <xsl:value-of select="normalize-space(.)"/>
+    </xsl:template>
     
     <xsl:template match="/">
         <!-- generate CSS -->
@@ -387,7 +415,7 @@ table, td, tr, th {
             <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
             <html>
                 <head>
-                    <title><xsl:value-of select="$review-title"/></title>
+                    <title><xsl:value-of select="normalize-space($review-title)"/></title>
                     <link rel="stylesheet" href="{$review-shortcut}.css"></link>
                     <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
                 </head>
@@ -398,7 +426,7 @@ table, td, tr, th {
                         <p>published by the <a href="https://www.i-d-e.de/">IDE</a></p>
                     </div>
                     <div class="body">
-                        <h1><xsl:value-of select="$review-title"/></h1>
+                        <h1><xsl:apply-templates select="$review-title" mode="review-title"/></h1>
                         <div class="source">
                             <xsl:choose>
                                 <xsl:when test="contains(lower-case($review-title),'editorial')">
@@ -608,7 +636,14 @@ table, td, tr, th {
     </xsl:template>
     
     <xsl:template match="body//graphic">
-        <img src="{@url}" class="graphic" alt="{@xml:id}"/>
+        <xsl:choose>
+            <xsl:when test="ancestor::table">
+                <img src="{@url}" class="graphic" alt="{@xml:id}" style="width: 90%;"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <img src="{@url}" class="graphic" alt="{@xml:id}"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template match="body//figure[starts-with(@xml:id,'img')]/head[@type='legend']">
