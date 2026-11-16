@@ -9,7 +9,7 @@
         transform a RIDE review to HTML/CSS as a basis for PDF generation
         @author: Ulrike Henny-Krahmer
         created on 16 January 2021
-        last updated on 11 March 2026
+        last updated on 16 November 2026
         
         This is a component file of the RIDE scripts.
 		RIDE scripts is free software: you can redistribute it and/or modify
@@ -435,7 +435,7 @@ table, td, tr, th {
                                             <xsl:variable name="review-author-surname" select=".//surname"/>
                                             <xsl:variable name="review-author-forename" select=".//forename"/>
                                             <xsl:value-of select="$review-author-forename"/><xsl:text> </xsl:text><xsl:value-of select="$review-author-surname"/>
-                                            (<xsl:value-of select=".//orgName"/>), <xsl:value-of select=".//email"/>
+                                            (<xsl:value-of select="string-join(.//orgName,', ')"/>), <xsl:value-of select=".//email"/>
                                             <xsl:choose>
                                                 <xsl:when test="position() != last()">
                                                     <xsl:choose>
@@ -489,7 +489,7 @@ table, td, tr, th {
                                             <xsl:variable name="review-author-surname" select=".//surname"/>
                                             <xsl:variable name="review-author-forename" select=".//forename"/>
                                             <xsl:value-of select="$review-author-forename"/><xsl:text> </xsl:text><xsl:value-of select="$review-author-surname"/>
-                                            (<xsl:value-of select=".//orgName"/>), <xsl:value-of select=".//email"/>
+                                            (<xsl:value-of select="string-join(.//orgName,', ')"/>), <xsl:value-of select=".//email"/>
                                             <xsl:choose>
                                                 <xsl:when test="position() != last()">
                                                     <xsl:choose>
